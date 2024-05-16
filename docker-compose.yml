@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: "sqlite3:/app/db/development.sqlite3"
+      REDIS_URL: "redis://redis:6379/0"
+      SMTP_ADDRESS: "sandbox.smtp.mailtrap.io"
+      SMTP_PORT: "2525"
+      SMTP_DOMAIN: "yourdomain.com"
+      SMTP_USERNAME: "428cbc8c42cd74"
+      SMTP_PASSWORD: "8218de71ce2b14"
+    command: ["bash", "-c", "bundle exec rails s -b 0.0.0.0"]
+
+  sidekiq:
+    build: .
+    command: ["bundle", "exec", "sidekiq"]
+    depends_on:
+      - db
+      - redis
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: "sqlite3:/app/db/development.sqlite3"
+      REDIS_URL: "redis://redis:6379/0"
+      SMTP_ADDRESS: "sandbox.smtp.mailtrap.io"
+      SMTP_PORT: "2525"
+      SMTP_DOMAIN: "yourdomain.com"
+      SMTP_USERNAME: "428cbc8c42cd74"
+      SMTP_PASSWORD: "8218de71ce2b14"
+
+  db:
+    build: .
+    volumes:
+      - ./db:/app/db
+    environment:
+      DATABASE_URL: "sqlite3:/app/db/development.sqlite3"
+
+  redis:
+    image: redis:latest
