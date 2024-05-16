@@ -5,7 +5,7 @@ class PatientsController < ApplicationController
     @patient = Patient.new(patient_params)
 
     if @patient.save
-      PatientRegistrationMailer.confirmation_email(@patient).deliver_later
+      NotificationService.new(@patient).send_notifications
       
       render json: { message: 'Patient registered successfully' }, status: :created
     else
