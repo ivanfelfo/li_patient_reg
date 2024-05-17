@@ -41,7 +41,7 @@ docker build -t <image_name>
 
 2. Run Docker Container: After the Docker image is built, start a Docker container by running the following command:
 ```
-docker run --name <container_name> -d -p 3000:3000 <image_name>
+docker run --name <container_name> -p 3000:3000 <image_name>
 ```
 Adjust the port mapping as needed.
 
